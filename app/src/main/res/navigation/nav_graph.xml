@@ -18,5 +18,14 @@
         android:id="@+id/askFragment"
         android:name="com.hackfest.swiftaid.fragments.AskFragment"
         android:label="fragment_ask"
-        tools:layout="@layout/fragment_ask" />
+        tools:layout="@layout/fragment_ask" >
+        <action
+            android:id="@+id/action_askFragment_to_nearByFragment"
+            app:destination="@id/nearByFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nearByFragment"
+        android:name="com.hackfest.swiftaid.fragments.map.NearByFragment"
+        android:label="fragment_near_by"
+        tools:layout="@layout/fragment_near_by" />
 </navigation>
