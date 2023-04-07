@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "163575649804",
+    "project_id": "swiftaid-hackfest",
+    "storage_bucket": "swiftaid-hackfest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163575649804:android:e2d2abc3ea562923084029",
+        "android_client_info": {
+          "package_name": "com.hackfest.swiftaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163575649804-c49n99c85h171rkk14bj60fl99n00f7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDu1wmpQRVvfEdXu1rcpaVSeR2RnO-szQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163575649804-c49n99c85h171rkk14bj60fl99n00f7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
