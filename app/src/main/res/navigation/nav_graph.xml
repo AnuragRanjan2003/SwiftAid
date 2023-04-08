@@ -61,5 +61,14 @@
         android:id="@+id/userOtpFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.user.UserOtpFragment"
         android:label="fragment_user_otp"
-        tools:layout="@layout/fragment_user_otp" />
+        tools:layout="@layout/fragment_user_otp" >
+        <action
+            android:id="@+id/action_userOtpFragment_to_nearByFragment"
+            app:destination="@id/nearByFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nearByFragment"
+        android:name="com.hackfest.swiftaid.fragments.map.NearByFragment"
+        android:label="fragment_near_by"
+        tools:layout="@layout/fragment_near_by" />
 </navigation>

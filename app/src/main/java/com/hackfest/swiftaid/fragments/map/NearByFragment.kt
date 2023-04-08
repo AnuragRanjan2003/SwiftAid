@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.e
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.constants.MAP_ZOOM
 import com.hackfest.swiftaid.databinding.FragmentNearByBinding
@@ -38,6 +43,8 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
     private lateinit var mapsViewModel: MapsViewModel
     private var map: GoogleMap? = null
     private var myMarker: Marker? = null
+    private lateinit var auth : FirebaseAuth
+    private lateinit var user : FirebaseUser
     private lateinit var repository: Repository
     private lateinit var factory: MapViewModelFactory
     private lateinit var bottomSheetFragment: BottomSheetFragment
@@ -45,7 +52,10 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
     private val placelist = ArrayList<OpenStreetResponseItem>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        auth = Firebase.auth
+        auth.currentUser?.apply {
+            user  = this
+        }
     }
 
     override fun onCreateView(
@@ -65,6 +75,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
 
 
         createMarker()
+        e("number",user.email.toString())
 
 
         binding.search.setAdapter(

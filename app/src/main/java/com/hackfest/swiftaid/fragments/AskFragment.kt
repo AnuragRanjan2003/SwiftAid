@@ -29,7 +29,7 @@ class AskFragment : Fragment() {
         }
 
         binding.orgButton.setOnClickListener {
-            nc.navigate(R.id.organisationAskFragment)
+//            nc.navigate(R.id.organisationAskFragment)
         }
 
         // Inflate the layout for this fragment

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -155,6 +156,7 @@ class UserOtpFragment : Fragment() {
                         .show()
 
                     val user = task.result?.user
+                    findNavController().navigate(R.id.action_userOtpFragment_to_nearByFragment)
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(ContentValues.TAG, "signInWithCredential:failure", task.exception)

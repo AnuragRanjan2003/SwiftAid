@@ -132,6 +132,7 @@ class UserLoginFragment : Fragment() {
             if (it.isSuccessful) {
                 //Update the UI
                 Toast.makeText(this.context, "Logged In Successfully !", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.nearByFragment)
             } else {
                 Toast.makeText(this.context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
