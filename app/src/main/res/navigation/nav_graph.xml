@@ -20,12 +20,31 @@
         android:label="fragment_ask"
         tools:layout="@layout/fragment_ask" >
         <action
-            android:id="@+id/action_askFragment_to_nearByFragment"
-            app:destination="@id/nearByFragment" />
+            android:id="@+id/action_askFragment_to_userLoginFragment"
+            app:destination="@id/userLoginFragment" />
     </fragment>
     <fragment
         android:id="@+id/nearByFragment"
         android:name="com.hackfest.swiftaid.fragments.map.NearByFragment"
         android:label="fragment_near_by"
         tools:layout="@layout/fragment_near_by" />
+    <fragment
+        android:id="@+id/userOtpFragment"
+        android:name="com.hackfest.swiftaid.fragments.authentication.user.UserOtpFragment"
+        android:label="fragment_user_otp"
+        tools:layout="@layout/fragment_user_otp" />
+    <fragment
+        android:id="@+id/organisationLoginFragment"
+        android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationLoginFragment"
+        android:label="fragment_organisation_login"
+        tools:layout="@layout/fragment_organisation_login" />
+    <fragment
+        android:id="@+id/userLoginFragment"
+        android:name="com.hackfest.swiftaid.fragments.authentication.user.UserLoginFragment"
+        android:label="fragment_user_login"
+        tools:layout="@layout/fragment_user_login" >
+        <action
+            android:id="@+id/action_userLoginFragment_to_userOtpFragment"
+            app:destination="@id/userOtpFragment" />
+    </fragment>
 </navigation>
