@@ -49,7 +49,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBottomSheetBinding.inflate(inflater,container,false)
+        binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
 
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         binding.place.text = placeName
@@ -64,6 +64,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
                 longitude = my_Loc!!.longitude,
                 ventilator = binding.vent.isChecked,
                 ecgMonitor = binding.ecg.isChecked,
+                suctionUnit = binding.suck.isChecked,
                 userID = uid,
                 destName = placeName!!,
                 destinationLat = dest_Loc!!.latitude,
@@ -72,10 +73,10 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
                 acceptedBy = ""
             )
             Log.e("request", "$request")
-            val repo= Repository()
-            repo.postRequest(request,requireActivity().applicationContext){
+            val repo = Repository()
+            repo.postRequest(request, requireActivity().applicationContext) {
                 dismiss()
-                Toast.makeText(context,"posted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "posted", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -102,8 +103,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         return df.format(c)
     }
-
-
 
 
 }
