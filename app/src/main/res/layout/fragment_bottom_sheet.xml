@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.map.BottomSheetFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="20dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans"
+                android:text="Request Ambulance"
+                android:textColor="#3E3E3E"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:fontFamily="@font/dm_sans"
+                android:text="place"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/dist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/dm_sans"
+                android:text="distance"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/place"
+                app:layout_constraintStart_toStartOf="@+id/place"
+                app:layout_constraintTop_toBottomOf="@+id/place" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Select amenities"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:fontFamily="@font/dm_sans"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dist" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/vent"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ventilator"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/suck"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="suction unit"
+                    android:textSize="16sp" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/ecg"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ECG Monitor"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#1BAB1B"
+                android:fontFamily="@font/dm_sans"
+                android:text="Confirm"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
