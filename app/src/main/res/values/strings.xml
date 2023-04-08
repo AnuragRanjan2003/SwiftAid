@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="API_KEY">AIzaSyCJl7AG8w2OAMDVu5qVgBcxViAsXgNdo6c</string>
     <string name="firebaseUrl">https://swiftaid-hackfest-default-rtdb.firebaseio.com</string>
+    <string name="get_instant">Get Instant Ambulance Service</string>
+    <string name="sec_remaining">Seconds Remaining</string>
+
 </resources>

@@ -35,7 +35,7 @@
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="36dp"
-
+        android:fontFamily="@font/bold"
         android:gravity="top"
         android:lineHeight="42sp"
         android:text="Select How You Want to Proceed As"
@@ -51,7 +51,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/rectangle_2"
-
+        android:fontFamily="@font/bold"
         android:lineHeight="42sp"
         android:text="Patient"
         android:textAllCaps="false"
@@ -70,6 +70,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="36dp"
         android:background="@drawable/rectangle_3"
+        android:fontFamily="@font/bold"
         android:text="Organization"
         android:textAllCaps="false"
         android:textSize="18sp"
