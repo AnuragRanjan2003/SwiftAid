@@ -1,13 +1,13 @@
 package com.hackfest.swiftaid.fragments.authentication.user
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -36,8 +36,8 @@ class UserLoginFragment : Fragment() {
     private var phoneNumber: String = ""
     private lateinit var number: String
     private lateinit var binding: FragmentUserLoginBinding
-    private lateinit var mProgressbar: ProgressBar
     private var OTP: String = ""
+    private lateinit var progressDialog: ProgressDialog
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private var bundle: Bundle = Bundle()
 
@@ -53,17 +53,17 @@ class UserLoginFragment : Fragment() {
         binding = FragmentUserLoginBinding.inflate(inflater, container, false)
         val nc = findNavController()
 
-
-
         bundle.putString("Phone Number", phoneNumber)
-        mProgressbar = binding.phoneProgressBar
-        mProgressbar.visibility = View.INVISIBLE
+//        mProgressbar = binding.phoneProgressBar
+//        mProgressbar.visibility = View.INVISIBLE
         binding.sendOtpButton.setOnClickListener {
+
             number = binding.phoneInput.text.toString()
             phoneNumber = binding.countryCodeLabel.text.toString() + number
             Log.e("number", number)
             if (number.isNotEmpty()) {
-                mProgressbar.visibility = View.VISIBLE
+                progressDialog = createProgressDialog("Please wait....", false)
+                progressDialog.show()
                 val options = PhoneAuthOptions.newBuilder(auth)
                     .setPhoneNumber(phoneNumber)       // Phone number to verify
                     .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -73,11 +73,10 @@ class UserLoginFragment : Fragment() {
                 PhoneAuthProvider.verifyPhoneNumber(options)
 
             } else {
-                mProgressbar.visibility = View.INVISIBLE
                 Toast.makeText(this.context, "Please Enter Your Number", Toast.LENGTH_SHORT).show()
                 binding.sendOtpButton.isEnabled = false
             }
-            mProgressbar.visibility = View.INVISIBLE
+
             binding.continueButton.setOnClickListener {
                 Log.e("otp", OTP)
                 bundle.putString("OTP", OTP)
@@ -132,6 +131,7 @@ class UserLoginFragment : Fragment() {
             if (it.isSuccessful) {
                 //Update the UI
                 Toast.makeText(this.context, "Logged In Successfully !", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.nearByFragment)
             } else {
                 Toast.makeText(this.context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -204,6 +204,7 @@ class UserLoginFragment : Fragment() {
             binding.sendOtpButton.visibility = View.INVISIBLE
             binding.continueButton.visibility = View.VISIBLE
 
+            progressDialog.dismiss()
 //                if (::resendToken.isInitialized) {
 //                     putParcelable("resendToken", resendToken)
 //                 }
@@ -218,5 +219,13 @@ class UserLoginFragment : Fragment() {
 
     }
 
+    fun Fragment.createProgressDialog(message: String, isCancelable: Boolean): ProgressDialog {
+        return android.app.ProgressDialog(this.requireContext()).apply {
+            setCancelable(false)
+            setMessage(message)
+            setCanceledOnTouchOutside(false)
+        }
 
+
+    }
 }

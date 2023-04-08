@@ -1,17 +1,24 @@
 package com.hackfest.swiftaid.fragments.authentication.user
 
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -29,7 +36,8 @@ class UserOtpFragment : Fragment() {
     private var mCounterDown: CountDownTimer? = null
     private lateinit var OTP: String
     private lateinit var binding: FragmentUserOtpBinding
-    private  var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+    private lateinit var progressDialog: ProgressDialog
+    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private lateinit var phoneNumber: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,20 +51,20 @@ class UserOtpFragment : Fragment() {
     ): View? {
         binding = FragmentUserOtpBinding.inflate(inflater, container, false)
 
-        // Retrived OTP, phone number and resending token from UserLoginFragment
+        // Retrieved OTP, phone number and resending token from UserLoginFragment
         OTP = arguments?.getString("OTP").toString()
         phoneNumber = arguments?.getString("Phone Number")!!.toString()
         arguments?.let {
             resendToken = it.getParcelable("resend")!!
         }
-
-
-
+        setSpannableString()
+        showTimer(60000)
+        initAuth()
         // Inflate the layout for this fragment
         return (binding.root)
     }
 
-    private fun initAuth(){
+    private fun initAuth() {
         binding.btnVerify.setOnClickListener {
             Log.e("OTP", OTP)
             val typedOTP = binding.etCode.text.toString()
@@ -64,7 +72,7 @@ class UserOtpFragment : Fragment() {
             if (typedOTP.isNotEmpty()) {
                 if (typedOTP.length == 6) {
                     val credentials: PhoneAuthCredential =
-                        PhoneAuthProvider.getCredential(OTP, typedOTP,)
+                        PhoneAuthProvider.getCredential(OTP, typedOTP)
                     signInWithPhoneAuthCredential(credentials)
                 } else {
                     Toast.makeText(this.context, "Please Enter Correct OTP", Toast.LENGTH_SHORT)
@@ -83,11 +91,17 @@ class UserOtpFragment : Fragment() {
         }, 60000)
 
         binding.btnResend.setOnClickListener {
-            resendVerificationCode()
+            if (resendToken != null) {
+                showTimer(60000)
+//                progressDialog = createProgressDialog("Sending verification code ...", false)
+//                progressDialog.show()
+                resendVerificationCode()
+            }
         }
     }
 
     private fun resendVerificationCode() {
+
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -150,6 +164,7 @@ class UserOtpFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this.requireActivity()) { task ->
                 if (task.isSuccessful) {
+                    findNavController().navigate(R.id.nearByFragment)
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this.context, "Authentication Successful", Toast.LENGTH_SHORT)
                         .show()
@@ -167,12 +182,36 @@ class UserOtpFragment : Fragment() {
             }
     }
 
+
+    private fun setSpannableString() {
+
+        val span = SpannableString(getString(R.string.waiting_text, phoneNumber))
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(p0: View) {
+                showUserLoginFragment()
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+                ds.color = ds.linkColor
+            }
+        }
+        span.setSpan(clickableSpan, span.length - 14, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.tvVerify.movementMethod = LinkMovementMethod.getInstance()
+        binding.tvVerify.text = span
+    }
+
+    private fun showUserLoginFragment() {
+        findNavController().navigate(R.id.action_userOtpFragment_to_userLoginFragment)
+    }
+
     private fun showTimer(milliSecInFuture: Long) {
         binding.btnResend.isEnabled = false
         mCounterDown = object : CountDownTimer(milliSecInFuture, 1000) {
             override fun onTick(p0: Long) {
                 binding.tvCounter.isVisible = true
-                binding.tvCounter.text = "Seconds Remaining : ${p0/1000}"
+                binding.tvCounter.text = "Seconds Remaining : ${p0 / 1000}"
             }
 
             override fun onFinish() {
@@ -189,5 +228,12 @@ class UserOtpFragment : Fragment() {
         }
     }
 
+    fun Fragment.createProgressDialog(message: String, isCancelable: Boolean): ProgressDialog {
+        return android.app.ProgressDialog(this.requireContext()).apply {
+            setCancelable(false)
+            setMessage(message)
+            setCanceledOnTouchOutside(false)
+        }
+    }
 }
 

@@ -1,10 +1,9 @@
 package com.hackfest.swiftaid.fragments.map
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.Log.e
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,50 +13,61 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.constants.MAP_ZOOM
 import com.hackfest.swiftaid.databinding.FragmentNearByBinding
 import com.hackfest.swiftaid.models.OpenStreetResponseItem
 import com.hackfest.swiftaid.repository.Repository
+import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.MapsViewModel
 import com.hackfest.swiftaid.viewModels.factory.MapViewModelFactory
 
-
-class NearByFragment : Fragment(),OnMapReadyCallback {
+class NearByFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentNearByBinding
     private lateinit var mapsViewModel: MapsViewModel
     private var map: GoogleMap? = null
+    private lateinit var ambulanceViewmodel: AmbulanceViewModel
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
     private var myMarker: Marker? = null
     private lateinit var repository: Repository
     private lateinit var factory: MapViewModelFactory
     private lateinit var bottomSheetFragment: BottomSheetFragment
     private val namelist = ArrayList<String>()
     private val placelist = ArrayList<OpenStreetResponseItem>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         binding = FragmentNearByBinding.inflate(inflater, container, false)
         repository = Repository()
         factory = MapViewModelFactory(repository, requireActivity().application)
         mapsViewModel = ViewModelProvider(this, factory)[MapsViewModel::class.java]
         bottomSheetFragment = BottomSheetFragment()
+
+        auth = Firebase.auth
+        database = Firebase.database
+
+        ambulanceViewmodel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        )[AmbulanceViewModel::class.java]
+        // getting the list of ambulances
+
 
         // handling location
         prepLocationUpdates()
@@ -65,6 +75,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
 
 
         createMarker()
+
 
 
         binding.search.setAdapter(
@@ -82,9 +93,12 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
                 position: Int,
                 id: Long
             ) {
+
+
                 val pos = namelist.indexOf(binding.search.text.toString())
-                Log.e("pos", "$pos")
+                e("pos", "$pos")
                 val bundlebtm = Bundle()
+
                 bundlebtm.putString("place", namelist[pos])
                 bundlebtm.putDoubleArray(
                     "loc",
@@ -93,7 +107,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
                 myMarker?.position?.let {
                     bundlebtm.putDoubleArray("my_loc", doubleArrayOf(it.latitude, it.longitude))
                 }
-               bottomSheetFragment.arguments = bundlebtm
+                bottomSheetFragment.arguments = bundlebtm
                 bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
 
             }
@@ -103,7 +117,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
 
         // getting live location nd setting it to map
         mapsViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            Log.e("loc", "$it")
+            e("loc", "$it")
             myMarker?.position = it
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
             mapsViewModel.getPlaces(LatLng(it.latitude, it.longitude))
@@ -120,7 +134,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
                     namelist.add(s[0])
                 }
             }
-            Log.e("places", "$namelist")
+            e("places", "$namelist")
             map?.apply {
                 placeMarkers(it, this)
             }
@@ -141,7 +155,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
     private fun prepLocationUpdates() {
         if (ContextCompat.checkSelfPermission(
                 activity as AppCompatActivity, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+            ) == PERMISSION_GRANTED
         ) requestLocationUpdates()
         else requestSinglePermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
@@ -162,6 +176,7 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         this.map = p0  // getting instance of map
         createMarker()
+        ambulanceViewmodel.getAmbulanceList(auth, map!!, myMarker!!)
 
 
     }
@@ -170,8 +185,13 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
         map?.let { googleMap ->
             googleMap.addMarker(MarkerOptions().position(LatLng(0.00, 0.00)))?.let {
                 this.myMarker = it
+                it.title = "userLocation"
+
+
             }
         }
+
+
     }
 
     private fun placeMarkers(
@@ -191,6 +211,4 @@ class NearByFragment : Fragment(),OnMapReadyCallback {
         }
     }
 
-    }
-
-
+}

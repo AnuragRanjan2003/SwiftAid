@@ -6,5 +6,6 @@
     <string name="firebaseUrl">https://swiftaid-hackfest-default-rtdb.firebaseio.com</string>
     <string name="get_instant">Get Instant Ambulance Service</string>
     <string name="sec_remaining">Seconds Remaining</string>
+    <string name="waiting_text">%s.Wrong Number ?</string>
 
 </resources>

@@ -64,7 +64,6 @@
         android:background="@drawable/edit_text_shape"
         android:fontFamily="@font/regular"
         android:hint="------"
-        android:textColorHint="@color/white"
         android:imeActionId="6"
         android:imeActionLabel="Send"
         android:imeOptions="actionUnspecified"
@@ -76,7 +75,8 @@
         android:padding="10dp"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
 
     <TextView
         android:id="@+id/tvCode"
@@ -98,10 +98,12 @@
         android:layout_gravity="center"
         android:layout_marginTop="80dp"
         android:background="@drawable/rectangle_5"
+        android:fontFamily="@font/bold"
         android:padding="15dp"
         android:text="Verify OTP"
+        android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="17sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnResend"
@@ -113,7 +115,8 @@
         android:enabled="false"
         android:padding="15dp"
         android:text="Resend OTP"
+        android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="17sp" />
 
 </LinearLayout>
