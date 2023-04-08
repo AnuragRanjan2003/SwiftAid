@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Text Input Layout for vehicle number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/vehicle_number_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Vehicle Number">
+
+        <!-- EditText for vehicle number -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/vehicle_number_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout for driver name -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/driver_name_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vehicle_number_text_input_layout"
+        android:layout_margin="16dp"
+        android:hint="Driver Name">
+
+        <!-- EditText for driver name -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/driver_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout for driver number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/driver_number_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/driver_name_text_input_layout"
+        android:layout_margin="16dp"
+        android:hint="Driver Number">
+
+        <!-- EditText for driver number -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/driver_number_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipFilterGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver_number_text_input_layout"
+        android:layout_marginTop="16sp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16sp"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipVentilator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="Ventilator"
+            android:layout_marginEnd="16sp"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSuctionUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="Suction Unit"
+            android:layout_marginEnd="16sp"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipECG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="ECG Monitor"
+            android:layout_marginEnd="16sp"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="fab"
+        android:layout_below="@+id/driver_number_text_input_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30sp"
+        android:layout_marginTop="150sp"/>
+
+</RelativeLayout>
