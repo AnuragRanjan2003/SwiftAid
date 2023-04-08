@@ -28,6 +28,7 @@ class OrganisationAskFragment : Fragment() {
         val nc = findNavController()
         binding.loginButton.setOnClickListener {
             nc.navigate(R.id.organisationLoginFragment)
+
         }
 
         binding.signUpButton.setOnClickListener {

@@ -1,15 +1,16 @@
 package com.hackfest.swiftaid.models
 
 data class Ambulance(
-    val vehicleNumber: String = "",
-    val driverNumber: String = "",
-    val lonbgitude: String = "0.0",
-    val lattitude: String = "0.0",
-    val driverName: String = "",
-    val busy: Boolean = false,
-    val ecgMonitor: Boolean = false,
-    val suctionUnit: Boolean = false,
-    val ventilator: Boolean = false,
-    val orgAuthID: String = ""
+    val orgAuthID:String? = null,
+    var vehicleNumber:String? = null,
+    var driverName:String? = null,
+    var driverNumber:String? = null,
+    var busy:Boolean? = null,
+    var lattitude:String? = null,
+    var lonbgitude:String? = null,
+    var ventilator:Boolean? = null,
+    var suctionUnit:Boolean? = null,
+    var ecgMonitor:Boolean? = null
+
 )
 

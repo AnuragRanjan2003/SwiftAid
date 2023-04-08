@@ -36,6 +36,7 @@ import com.hackfest.swiftaid.repository.Repository
 import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.MapsViewModel
 import com.hackfest.swiftaid.viewModels.factory.MapViewModelFactory
+import com.hackfest.swiftaid.viewmodels.UserAmbulanceViewModel
 
 class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     private lateinit var binding: FragmentTrackingfragmentBinding
@@ -46,7 +47,7 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     private lateinit var repository: Repository
     private lateinit var nearestambulance: Ambulance
     private lateinit var nearestAmbulanceData: NearestAmbulanceData
-    private lateinit var ambulanceViewmodel: AmbulanceViewModel
+    private lateinit var ambulanceViewmodel: UserAmbulanceViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private var ac: Boolean = false
@@ -76,7 +77,7 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         ambulanceViewmodel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        )[AmbulanceViewModel::class.java]
+        )[UserAmbulanceViewModel::class.java]
         // getting the list of ambulances
 
 

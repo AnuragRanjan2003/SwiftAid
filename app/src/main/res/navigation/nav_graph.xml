@@ -51,12 +51,20 @@
         android:id="@+id/organisationLoginFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationLoginFragment"
         android:label="fragment_organisation_login"
-        tools:layout="@layout/fragment_organisation_login" />
+        tools:layout="@layout/fragment_organisation_login" >
+        <action
+            android:id="@+id/action_organisationLoginFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/organisationSignUpFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationSignUpFragment"
         android:label="fragment_organisation_sign_up"
-        tools:layout="@layout/fragment_organisation_sign_up" />
+        tools:layout="@layout/fragment_organisation_sign_up" >
+        <action
+            android:id="@+id/action_organisationSignUpFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userOtpFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.user.UserOtpFragment"
@@ -87,4 +95,17 @@
         android:name="com.hackfest.swiftaid.fragments.maps.trackingfragment"
         android:label="fragment_trackingfragment"
         tools:layout="@layout/fragment_trackingfragment" />
+    <fragment
+        android:id="@+id/organisationAmbulancesFragment"
+        android:name="com.hackfest.swiftaid.fragments.OrganisationAmbulancesFragment"
+        android:label="fragment_organisation_ambulances"
+        tools:layout="@layout/fragment_organisation_ambulances" >
+        <action
+            android:id="@+id/action_organisationAmbulancesFragment_to_ambulanceDetailsFragment2"
+            app:destination="@id/ambulanceDetailsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/ambulanceDetailsFragment2"
+        android:name="com.hackfest.swiftaid.fragments.AmbulanceDetailsFragment"
+        android:label="AmbulanceDetailsFragment" />
 </navigation>

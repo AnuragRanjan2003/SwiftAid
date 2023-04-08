@@ -21,9 +21,7 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
             driverNumber = it.getString("drivernumber")!!
             vehicleNumber = it.getString("vehiclenumber")!!
 
-
         }
-
     }
 
     override fun onCreateView(

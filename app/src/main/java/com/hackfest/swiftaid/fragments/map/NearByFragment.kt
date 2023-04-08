@@ -36,12 +36,13 @@ import com.hackfest.swiftaid.repository.Repository
 import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.MapsViewModel
 import com.hackfest.swiftaid.viewModels.factory.MapViewModelFactory
+import com.hackfest.swiftaid.viewmodels.UserAmbulanceViewModel
 
 class NearByFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentNearByBinding
     private lateinit var mapsViewModel: MapsViewModel
     private var map: GoogleMap? = null
-    private lateinit var ambulanceViewmodel: AmbulanceViewModel
+    private lateinit var ambulanceViewmodel: UserAmbulanceViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private var myMarker: Marker? = null
@@ -62,11 +63,7 @@ class NearByFragment : Fragment(), OnMapReadyCallback {
         auth = Firebase.auth
         database = Firebase.database
 
-        ambulanceViewmodel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        )[AmbulanceViewModel::class.java]
-        // getting the list of ambulances
+        ambulanceViewmodel = ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory(requireActivity().application))[UserAmbulanceViewModel::class.java]
 
 
         // handling location
@@ -206,7 +203,7 @@ class NearByFragment : Fragment(), OnMapReadyCallback {
                         place.lon.toDouble()
                     )
                 ).title(place.display_name)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hospitalmarker))
             )
         }
     }
