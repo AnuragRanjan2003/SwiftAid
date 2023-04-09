@@ -6,21 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.maps.android.SphericalUtil
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentBottomSheetBinding
 import com.hackfest.swiftaid.fragments.maps.trackingfragment
+import com.hackfest.swiftaid.models.Ambulance
+import com.hackfest.swiftaid.models.NearestAmbulanceData
 import com.hackfest.swiftaid.models.Request
 import com.hackfest.swiftaid.repository.Repository
+import com.hackfest.swiftaid.viewModels.UserAmbulanceViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar.getInstance
+import kotlin.collections.ArrayList
 import kotlin.math.floor
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
@@ -28,7 +34,10 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     private var dest_Loc: LatLng? = null
     private var my_Loc: LatLng? = null
     private lateinit var mAuth: FirebaseAuth
+    private var vn  =""
     private lateinit var trackingfragment:trackingfragment
+    private lateinit var ambulance : NearestAmbulanceData
+    private var amb = ArrayList<Ambulance>()
 
     private lateinit var binding: FragmentBottomSheetBinding
 
@@ -57,9 +66,15 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
+        ambulance  =NearestAmbulanceData()
+        ambulance.getambulancelist {
+            amb = it
+        }
         binding.place.text = placeName
         binding.dist.text = getDistance(my_Loc, dest_Loc)
         trackingfragment = trackingfragment()
+        ambulance  = NearestAmbulanceData()
+
         binding.btnRequest.setOnClickListener {
 
             val nc = findNavController()
@@ -86,13 +101,20 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
                 Toast.makeText(context, "posted", Toast.LENGTH_LONG).show()
             }
-            val bundle = Bundle()
-            bundle.putBoolean("ac", request.ecgMonitor)
-            bundle.putBoolean("ventilator", request.ventilator)
-            bundle.putString("request", request.requestID)
-            trackingfragment.arguments = bundle
+            ambulance.getNearestAmbulance(my_Loc!!.latitude,my_Loc!!.longitude,binding.vent.isChecked,binding.suck.isChecked,amb){
+                vn = it.vehicleNumber!!
+                val bundle = Bundle()
+                bundle.putString("vn",vn)
+                bundle.putBoolean("ac", request.ecgMonitor)
+                bundle.putBoolean("ventilator", request.ventilator)
+                bundle.putString("request", request.requestID)
+                trackingfragment.arguments = bundle
 
-            nc.navigate(R.id.action_nearByFragment_to_trackingfragment, bundle)
+                nc.navigate(R.id.action_nearByFragment_to_trackingfragment, bundle)
+
+            }
+
+
 
 
         }

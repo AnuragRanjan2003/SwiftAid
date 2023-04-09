@@ -1,18 +1,24 @@
 package com.hackfest.swiftaid.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
-import com.hackfest.swiftaid.databinding.FragmentAskBinding
+import com.hackfest.swiftaid.databinding.FragmentSOSBinding
 
 
-class AskFragment : Fragment() {
-    private lateinit var binding: FragmentAskBinding
+class SOSFragment : Fragment() {
+    private lateinit var binding: FragmentSOSBinding
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,16 +28,26 @@ class AskFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAskBinding.inflate(inflater, container, false)
+        // Inflate the layout for this fragment
         val nc = findNavController()
-
-        binding.userButton.setOnClickListener {
-            nc.navigate(R.id.userLoginFragment)
+        binding = FragmentSOSBinding.inflate(inflater, container, false)
+        auth = Firebase.auth
+        binding.btnSignOut.setOnClickListener {
+            auth.signOut()
+            nc.navigate(R.id.splashFragment)
         }
 
-        binding.orgButton.setOnClickListener {
-            nc.navigate(R.id.organisationAskFragment)
+        binding.btnSos.setOnClickListener {
+            nc.navigate(R.id.nearByFragment)
         }
+
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                binding.animSos.visibility = View.VISIBLE
+                binding.animSos.playAnimation()
+
+            }, 2000
+        )
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -40,16 +56,9 @@ class AskFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        // Inflate the layout for this fragment
+
         return binding.root
     }
 
-//    override fun onBackPressed() {
-//        this.requireActivity().finish()
-//    }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        this.requireActivity().finish()
-//    }
 }

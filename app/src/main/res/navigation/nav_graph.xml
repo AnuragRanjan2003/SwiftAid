@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_splashFragment_to_askFragment"
             app:destination="@id/askFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_SOSFragment"
+            app:destination="@id/SOSFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
     </fragment>
     <fragment
         android:id="@+id/askFragment"
@@ -103,9 +109,30 @@
         <action
             android:id="@+id/action_organisationAmbulancesFragment_to_ambulanceDetailsFragment2"
             app:destination="@id/ambulanceDetailsFragment2" />
+        <action
+            android:id="@+id/action_organisationAmbulancesFragment_to_ambulanceMapFragment"
+            app:destination="@id/ambulanceMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/ambulanceDetailsFragment2"
         android:name="com.hackfest.swiftaid.fragments.AmbulanceDetailsFragment"
-        android:label="AmbulanceDetailsFragment" />
+        android:label="AmbulanceDetailsFragment" >
+        <action
+            android:id="@+id/action_ambulanceDetailsFragment2_to_splashFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ambulanceMapFragment"
+        android:name="com.hackfest.swiftaid.fragments.map.AmbulanceMapFragment"
+        android:label="fragment_ambulance_map"
+        tools:layout="@layout/fragment_ambulance_map" />
+    <fragment
+        android:id="@+id/SOSFragment"
+        android:name="com.hackfest.swiftaid.fragments.SOSFragment"
+        android:label="fragment_s_o_s"
+        tools:layout="@layout/fragment_s_o_s" >
+        <action
+            android:id="@+id/action_SOSFragment_to_nearByFragment"
+            app:destination="@id/nearByFragment" />
+    </fragment>
 </navigation>

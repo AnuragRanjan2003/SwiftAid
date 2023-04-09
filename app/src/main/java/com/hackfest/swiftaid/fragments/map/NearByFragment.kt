@@ -33,10 +33,9 @@ import com.hackfest.swiftaid.constants.MAP_ZOOM
 import com.hackfest.swiftaid.databinding.FragmentNearByBinding
 import com.hackfest.swiftaid.models.OpenStreetResponseItem
 import com.hackfest.swiftaid.repository.Repository
-import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.MapsViewModel
+import com.hackfest.swiftaid.viewModels.UserAmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.factory.MapViewModelFactory
-import com.hackfest.swiftaid.viewmodels.UserAmbulanceViewModel
 
 class NearByFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentNearByBinding
@@ -72,6 +71,7 @@ class NearByFragment : Fragment(), OnMapReadyCallback {
 
 
         createMarker()
+
 
 
 

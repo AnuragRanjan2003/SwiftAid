@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.OrganisationAmbulancesFragment">
 
     <com.google.android.material.card.MaterialCardView
@@ -16,11 +16,20 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
             app:queryBackground="@android:color/transparent"
-            app:queryHint="Search here ..." />
+
+            app:queryHint="Search Ambulances ..." />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sign_out"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/baseline_power_settings_new_24" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -29,17 +38,19 @@
         android:id="@+id/rvAmbulance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_item_ambulance"
-        android:layout_below="@+id/materialCardViewSearch"/>
+        android:layout_below="@+id/materialCardViewSearch"
+        tools:listitem="@layout/list_item_ambulance" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddAmbulance"
         android:layout_width="wrap_content"
-        android:contentDescription="fab"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:backgroundTint="#DBF1E7"
+        android:src="@drawable/baseline_add_24"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="35sp"
         android:layout_marginBottom="35sp"
-        android:layout_marginEnd="35sp"/>
+        android:contentDescription="fab" />
 
 </RelativeLayout>

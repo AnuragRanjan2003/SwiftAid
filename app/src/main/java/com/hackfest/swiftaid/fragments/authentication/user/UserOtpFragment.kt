@@ -164,7 +164,7 @@ class UserOtpFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this.requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    findNavController().navigate(R.id.nearByFragment)
+                    findNavController().navigate(R.id.SOSFragment)
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this.context, "Authentication Successful", Toast.LENGTH_SHORT)
                         .show()

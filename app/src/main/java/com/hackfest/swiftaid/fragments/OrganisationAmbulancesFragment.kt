@@ -3,15 +3,20 @@ package com.hackfest.swiftaid.fragments
 import android.os.Bundle
 import android.provider.Settings.Global.putString
 import android.util.Log
+import android.util.Log.e
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.adapter.AmbulancesAdapter
 import com.hackfest.swiftaid.databinding.FragmentOrganisationAmbulancesBinding
@@ -23,6 +28,7 @@ import com.hackfest.swiftaid.viewModels.factory.AmbulanceViewModelFactory
 class OrganisationAmbulancesFragment : Fragment() {
 
     private lateinit var binding: FragmentOrganisationAmbulancesBinding
+    private lateinit var auth : FirebaseAuth
 
     private lateinit var viewModel: AmbulanceViewModel
     private lateinit var viewModelFactory: AmbulanceViewModelFactory
@@ -34,6 +40,12 @@ class OrganisationAmbulancesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        orgAuthID = arguments?.getString("orgAuthID").toString()
+//        e("org",orgAuthID.toString())
+//        auth = Firebase.auth
+//        orgAuthID = auth.currentUser!!.uid
+
+
     }
 
     override fun onCreateView(
@@ -49,31 +61,48 @@ class OrganisationAmbulancesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        orgAuthID = arguments?.getString("orgAuthID").toString()
-        binding.fabAddAmbulance.setOnClickListener {
-            bundle.apply {
-                putString("orgAuthID", orgAuthID)
-            }
-            findNavController().navigate(
-                R.id.action_organisationAmbulancesFragment_to_ambulanceDetailsFragment2,
-                bundle)
+        auth = Firebase.auth
+        orgAuthID = auth.currentUser?.uid
 
+
+//        orgAuthID = auth.currentUser!!.uid
+        e("orgOnView",orgAuthID.toString())
+
+        binding.fabAddAmbulance.setOnClickListener {
+
+            findNavController().navigate(
+                R.id.action_organisationAmbulancesFragment_to_ambulanceDetailsFragment2,bundle.apply {
+                    putString("orgAuthID",orgAuthID)
+                })
+        }
+        val nc = findNavController()
+        binding.btnSignOut.setOnClickListener {
+            auth.signOut()
+            nc.navigate(R.id.splashFragment)
         }
 
         binding.rvAmbulance.layoutManager = LinearLayoutManager(context)
-        adapter = AmbulancesAdapter()
+        adapter = AmbulancesAdapter{
+            val bundle = Bundle()
+            bundle.putString("ambId",it)
+            findNavController().navigate(R.id.action_organisationAmbulancesFragment_to_ambulanceMapFragment,bundle)
+        }
         binding.rvAmbulance.adapter = adapter
 
         viewModelFactory = AmbulanceViewModelFactory(orgAuthID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(AmbulanceViewModel::class.java)
 
         viewModel.allAmbulances.observe(viewLifecycleOwner, Observer {
+            ambulanceList.clear()
+            e("orgAuthID observe",orgAuthID.toString())
             for (i in it) {
                 if (i.orgAuthID == orgAuthID) {
-                    Log.d("Data added", "${i.driverName}")
+
+                    Log.e("Data added", "${i.driverName}")
                     ambulanceList.add(i)
                 }
             }
+            e("list","$ambulanceList")
             adapter.updateAmbulanceList(ambulanceList)
         })
         binding.searchView.setOnQueryTextListener(object :
@@ -88,6 +117,13 @@ class OrganisationAmbulancesFragment : Fragment() {
             }
         })
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Call your function to exit the app
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
 
@@ -96,13 +132,13 @@ class OrganisationAmbulancesFragment : Fragment() {
         if (query != null) {
             val filteredList = ArrayList<Ambulance>()
             for (i in ambulanceList) {
-                if (i.driverName?.toLowerCase() == query) {
+                if (i.driverName == query) {
                     filteredList.add(i)
                 }
             }
 
-            if (filteredList.isEmpty()) {
-                Toast.makeText(context, "No Data Found", Toast.LENGTH_SHORT).show()
+            if (filteredList.isEmpty() && ambulanceList.isEmpty()) {
+                Toast.makeText(context,"No data found",Toast.LENGTH_SHORT).show()
             } else {
                 adapter.setFilteredList(filteredList)
             }

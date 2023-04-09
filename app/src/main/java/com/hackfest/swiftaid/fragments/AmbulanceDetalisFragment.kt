@@ -1,6 +1,7 @@
 package com.hackfest.swiftaid.fragments
 
 import android.os.Bundle
+import android.util.Log.e
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +17,17 @@ class AmbulanceDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentAmbulanceDetalisBinding
     private val dbRef by lazy {
-        FirebaseDatabase.getInstance("https://swiftaid-46a45-default-rtdb.firebaseio.com/").getReference("ambulance")
+        FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
+            .getReference("ambulance")
     }
 
-    private var orgAuthID:String? = null
-    private var vehicleNumber:String? = null
-    private var driverName:String? = null
-    private var driverNumber:String? = null
-    private var busy:Boolean? = false
-    private var lattitude:String? = "0"
-    private var lonbgitude:String? = "0"
+    private var orgAuthID: String? = null
+    private var vehicleNumber: String? = null
+    private var driverName: String? = null
+    private var driverNumber: String? = null
+    private var busy: Boolean? = false
+    private var lattitude: String? = "0"
+    private var lonbgitude: String? = "0"
     var ventilator = false
     var suctionUnit = false
     var ecgMonitor = false
@@ -39,34 +41,60 @@ class AmbulanceDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAmbulanceDetalisBinding.inflate(inflater,container,false)
+        binding = FragmentAmbulanceDetalisBinding.inflate(inflater, container, false)
 
         orgAuthID = arguments?.getString("orgAuthID").toString()
 
-        binding.fabAdd.setOnClickListener {
+        binding.btnContinue.setOnClickListener {
             vehicleNumber = binding.vehicleNumberEditText.text.toString()
             driverName = binding.driverNameEditText.text.toString()
             driverNumber = binding.driverNumberEditText.text.toString()
-            writeNewUserWithTaskListeners(orgAuthID,vehicleNumber, driverName, driverNumber)
-            findNavController().navigate(R.id.organisationAmbulancesFragment)
+            writeNewUserWithTaskListeners(orgAuthID, vehicleNumber, driverName, driverNumber)
+            val bundle = Bundle()
+            bundle.putString("orgAuthID", orgAuthID)
+            findNavController().navigate(R.id.organisationAmbulancesFragment, bundle)
         }
+
+//        val callback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                // Call your function to exit the app
+//                requireActivity().finish()
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         return binding.root
     }
 
-    fun writeNewUserWithTaskListeners(orgAuthID:String?,vehicleNumber: String?, driverName: String?, driverNumber:String?) {
+    fun writeNewUserWithTaskListeners(
+        orgAuthID: String?,
+        vehicleNumber: String?,
+        driverName: String?,
+        driverNumber: String?
+    ) {
 //        val ambuID = dbRef.push().key!!
-        if(binding.chipVentilator.isChecked){
+        if (binding.chipVentilator.isChecked) {
             ventilator = true
         }
-        if(binding.chipSuctionUnit.isChecked){
+        if (binding.chipSuctionUnit.isChecked) {
             suctionUnit = true
         }
-        if(binding.chipECG.isChecked){
+        if (binding.chipECG.isChecked) {
             ecgMonitor = true
         }
-        val ambulance = Ambulance(orgAuthID,vehicleNumber,driverName,driverNumber,busy,lattitude, lonbgitude,ventilator,suctionUnit,ecgMonitor)
-
+        val ambulance = Ambulance(
+            orgAuthID,
+            vehicleNumber,
+            driverName,
+            driverNumber,
+            false,
+            lattitude,
+            lonbgitude,
+            ventilator,
+            suctionUnit,
+            ecgMonitor
+        )
+        e("amb", "$ambulance")
         // [START rtdb_write_new_user_task]
         dbRef.child(vehicleNumber!!).setValue(ambulance)
             .addOnSuccessListener {
@@ -75,12 +103,12 @@ class AmbulanceDetailsFragment : Fragment() {
                 binding.vehicleNumberEditText.text?.clear()
                 binding.driverNameEditText.text?.clear()
                 binding.driverNumberEditText.text?.clear()
-                Toast.makeText(activity,"Ambulance details added",Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Ambulance details added", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 // Write failed
                 // ...
-                Toast.makeText(activity,"Ambulance details not added",Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Ambulance details not added", Toast.LENGTH_SHORT).show()
             }
         // [END rtdb_write_new_user_task]
     }

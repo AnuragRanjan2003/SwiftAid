@@ -11,7 +11,7 @@ import com.hackfest.swiftaid.models.Ambulance
 
         private val orgAuthID:String? = orgAuthID
         private val dbRef by lazy{
-            FirebaseDatabase.getInstance("https://swiftaid-46a45-default-rtdb.firebaseio.com/").getReference("ambulance")
+            FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/").getReference("ambulance")
         }
 
         @Volatile

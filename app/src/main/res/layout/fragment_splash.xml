@@ -5,15 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context=".fragments.SplashFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/https_lotti"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="68dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,17 +21,15 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/your_person"
-        android:layout_width="362.01dp"
-        android:layout_height="143.31dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        app:layout_constraintBottom_toTopOf="@+id/get_started"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="115dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/https_lotti"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="mshk-image-to-lottie.json" />
+        app:lottie_fileName="logo json.json" />
+
 
     <Button
         android:id="@+id/get_started"
@@ -41,6 +37,8 @@
         android:layout_height="44dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
         android:background="@drawable/rectangle_1"
         android:fontFamily="@font/bold"
         android:text="GET STARTED"
@@ -49,6 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.903" />
+        app:layout_constraintVertical_bias="0.794" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

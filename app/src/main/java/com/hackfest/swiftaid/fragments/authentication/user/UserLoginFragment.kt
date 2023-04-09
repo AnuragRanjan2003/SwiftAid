@@ -53,7 +53,7 @@ class UserLoginFragment : Fragment() {
         binding = FragmentUserLoginBinding.inflate(inflater, container, false)
         val nc = findNavController()
 
-        bundle.putString("Phone Number", phoneNumber)
+
 //        mProgressbar = binding.phoneProgressBar
 //        mProgressbar.visibility = View.INVISIBLE
         binding.sendOtpButton.setOnClickListener {
@@ -62,6 +62,7 @@ class UserLoginFragment : Fragment() {
             phoneNumber = binding.countryCodeLabel.text.toString() + number
             Log.e("number", number)
             if (number.isNotEmpty()) {
+                bundle.putString("Phone Number", phoneNumber)
                 progressDialog = createProgressDialog("Please wait....", false)
                 progressDialog.show()
                 val options = PhoneAuthOptions.newBuilder(auth)
@@ -131,7 +132,7 @@ class UserLoginFragment : Fragment() {
             if (it.isSuccessful) {
                 //Update the UI
                 Toast.makeText(this.context, "Logged In Successfully !", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.nearByFragment)
+                findNavController().navigate(R.id.SOSFragment)
             } else {
                 Toast.makeText(this.context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -168,24 +169,27 @@ class UserLoginFragment : Fragment() {
             // 2 - Auto-retrieval. On some devices Google Play services can automatically
             //     detect the incoming verification SMS and perform verification without
             //     user action.
-            Log.d(ContentValues.TAG, "onVerificationCompleted:$credential")
+            Log.e(ContentValues.TAG, "onVerificationCompleted:$credential")
             signInWithPhoneAuthCredential(credential)
         }
 
+
         override fun onVerificationFailed(e: FirebaseException) {
+            progressDialog.dismiss()
+            Toast.makeText(context,"Please Sign In through GOOGLE", Toast.LENGTH_SHORT).show()
             // This callback is invoked in an invalid request for verification is made,
             // for instance if the the phone number format is not valid.
-            Log.w(ContentValues.TAG, "onVerificationFailed", e)
+            Log.e(ContentValues.TAG, "onVerificationFailed", e)
 
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
                 // reCAPTCHA verification attempted with null Activity
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             }
 
             // Show a message and update the UI

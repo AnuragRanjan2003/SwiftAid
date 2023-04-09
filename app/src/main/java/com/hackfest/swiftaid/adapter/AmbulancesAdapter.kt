@@ -1,26 +1,30 @@
 package com.hackfest.swiftaid.adapter
 
+import android.content.Context
+import android.util.Log.e
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hackfest.swiftaid.databinding.ListItemAmbulanceBinding
 import com.hackfest.swiftaid.models.Ambulance
 
-class AmbulancesAdapter() : RecyclerView.Adapter<AmbulancesAdapter.AmbulanceViewHolder>() {
+class AmbulancesAdapter(private val onComplete: (String) -> Unit) :
+    RecyclerView.Adapter<AmbulancesAdapter.AmbulanceViewHolder>() {
+    private lateinit var context: Context
 
     private var ambulanceList = ArrayList<Ambulance>()
 
     inner class AmbulanceViewHolder(val binding: ListItemAmbulanceBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AmbulanceViewHolder {
-        val binding = ListItemAmbulanceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ListItemAmbulanceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
 
         return AmbulanceViewHolder(binding)
-
-
     }
 
     override fun onBindViewHolder(holder: AmbulanceViewHolder, position: Int) {
@@ -46,19 +50,28 @@ class AmbulancesAdapter() : RecyclerView.Adapter<AmbulancesAdapter.AmbulanceView
             strEquipments += "ECG Monitor"
         }
         holder.binding.equipment.text = strEquipments
+        holder.binding.root.setOnClickListener {
+                    onComplete(ambulance.vehicleNumber!!)
+
+
+
+
+        }
     }
 
     fun updateAmbulanceList(ambulanceList: List<Ambulance>) {
 
         this.ambulanceList.clear()
+        notifyItemRangeRemoved(0, this.ambulanceList.lastIndex)
         this.ambulanceList.addAll(ambulanceList)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, ambulanceList.lastIndex)
 
     }
-    fun setFilteredList(ambulanceList: ArrayList<Ambulance>){
+
+    fun setFilteredList(ambulanceList: ArrayList<Ambulance>) {
         this.ambulanceList.clear()
         this.ambulanceList = ambulanceList
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, ambulanceList.lastIndex)
     }
 
     override fun getItemCount() = ambulanceList.size

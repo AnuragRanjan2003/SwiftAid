@@ -77,32 +77,48 @@ class NearestAmbulanceData() {
         val myRef =
             FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
                 .getReference("ambulance")
-        myRef.addValueEventListener(object : ValueEventListener {
-
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val ambulanceList = ArrayList<Ambulance>()
-                if (snapshot.exists()) {
-                    for (datasnapshot in snapshot.children) {
-                        if ((!ambulanceList.contains(datasnapshot.getValue(Ambulance::class.java)))) {
-                            val ambulance = datasnapshot.getValue(Ambulance::class.java)
-                            if (!ambulance!!.busy!!) {
-                                ambulance?.let {
-                                    ambulanceList.add(it)
-                                }
+//        myRef.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val ambulanceList = ArrayList<Ambulance>()
+//                if (snapshot.exists()) {
+//                    for (datasnapshot in snapshot.children) {
+//                        if ((!ambulanceList.contains(datasnapshot.getValue(Ambulance::class.java)))) {
+//                            val ambulance = datasnapshot.getValue(Ambulance::class.java)
+//                            if (!ambulance!!.busy!!) {
+//                                ambulance.let {
+//                                    ambulanceList.add(it)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                onResult(ambulanceList)
+//
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                onResult(ArrayList())
+//                Log.e("getAmbulanceList", error.toString())
+//            }
+//        })
+        myRef.get().addOnSuccessListener {snapshot->
+            val ambulanceList = ArrayList<Ambulance>()
+            if (snapshot.exists()) {
+                for (datasnapshot in snapshot.children) {
+                    if ((!ambulanceList.contains(datasnapshot.getValue(Ambulance::class.java)))) {
+                        val ambulance = datasnapshot.getValue(Ambulance::class.java)
+                        if (!ambulance!!.busy!!) {
+                            ambulance.let {
+                                ambulanceList.add(it)
                             }
                         }
                     }
                 }
-                onResult(ambulanceList)
-
             }
+            onResult(ambulanceList)
 
-            override fun onCancelled(error: DatabaseError) {
-                onResult(ArrayList())
-                Log.e("getAmbulanceList", error.toString())
-            }
-        })
+
+        }
 
     }
 
@@ -150,7 +166,7 @@ class NearestAmbulanceData() {
 //        }
 //        ambulanceList.sortWith(distanceComparator)
 //        val nearestAmbulance = ambulanceList.firstOrNull()
-        onResult(nearambulance!!)
+        onResult(nearambulance)
     }
 
     fun marknearestambulance(nearambulance: Ambulance, map: GoogleMap) {
@@ -164,12 +180,8 @@ class NearestAmbulanceData() {
 
                 if (snapshot.exists()) {
                     for (datasnapshot in snapshot.children) {
-
-
                         val ambulance = datasnapshot.getValue(Ambulance::class.java)
                         if (ambulance!!.vehicleNumber == nearambulance.vehicleNumber) {
-
-
                             val markerColor = BitmapDescriptorFactory.HUE_AZURE
                             val markerOptions = MarkerOptions()
                                 .position(
@@ -181,19 +193,12 @@ class NearestAmbulanceData() {
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulancemarker))
                                 .title(ambulance.driverName)
                             map.addMarker(markerOptions)
-
-
                         }
-
-
                     }
                 }
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {
-
                 Log.e("getAmbulanceList", error.toString())
             }
         })

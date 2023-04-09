@@ -67,8 +67,8 @@ class Repository {
     }
 
     fun getAssignedRequest(ambId: String,onComplete:(String?)->Unit) {
-        val ref = FirebaseDatabase.getInstance("https://swiftaid-46a45-default-rtdb.firebaseio.com")
-            .getReference("ambulance").child(ambId).child("assignedTo")
+        val ref = FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
+            .getReference("ambulance").child(ambId).child("AssignedTo")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val reqId = snapshot.getValue(String::class.java)
@@ -82,7 +82,7 @@ class Repository {
     }
 
     fun getSingleRequest(reqId : String,onComplete: (Request?) -> Unit){
-        val ref = FirebaseDatabase.getInstance("https://swiftaid-46a45-default-rtdb.firebaseio.com")
+        val ref = FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
             .getReference("request").child(reqId).get().addOnSuccessListener {
                 val request = it.getValue(Request::class.java)
                 onComplete(request)
