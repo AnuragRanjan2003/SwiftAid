@@ -46,23 +46,13 @@ class AmbulanceDetailsFragment : Fragment() {
         orgAuthID = arguments?.getString("orgAuthID").toString()
 
         binding.btnContinue.setOnClickListener {
-
-            if(binding.driverNameEditText.text.toString().isNotEmpty() &&
-                    binding.vehicleNumberEditText.text.toString().isNotEmpty() &&
-                    binding.driverNumberEditText.text.toString().isNotEmpty()){
-
-                vehicleNumber = binding.vehicleNumberEditText.text.toString()
-                driverName = binding.driverNameEditText.text.toString()
-                driverNumber = binding.driverNumberEditText.text.toString()
-                writeNewUserWithTaskListeners(orgAuthID, vehicleNumber, driverName, driverNumber)
-                val bundle = Bundle()
-                bundle.putString("orgAuthID", orgAuthID)
-                findNavController().navigate(R.id.organisationAmbulancesFragment, bundle)
-            }
-            else{
-                Toast.makeText(context,"Please fill the required details",Toast.LENGTH_SHORT).show()
-            }
-
+            vehicleNumber = binding.vehicleNumberEditText.text.toString()
+            driverName = binding.driverNameEditText.text.toString()
+            driverNumber = binding.driverNumberEditText.text.toString()
+            writeNewUserWithTaskListeners(orgAuthID, vehicleNumber, driverName, driverNumber)
+            val bundle = Bundle()
+            bundle.putString("orgAuthID", orgAuthID)
+            findNavController().navigate(R.id.organisationAmbulancesFragment, bundle)
         }
 
 //        val callback = object : OnBackPressedCallback(true) {
@@ -108,13 +98,17 @@ class AmbulanceDetailsFragment : Fragment() {
         // [START rtdb_write_new_user_task]
         dbRef.child(vehicleNumber!!).setValue(ambulance)
             .addOnSuccessListener {
+                // Write was successful!
+                // ...
                 binding.vehicleNumberEditText.text?.clear()
                 binding.driverNameEditText.text?.clear()
                 binding.driverNumberEditText.text?.clear()
                 Toast.makeText(activity, "Ambulance details added", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                e("ambulanceDetails",it.message.toString())
+                // Write failed
+                // ...
+                Toast.makeText(activity, "Ambulance details not added", Toast.LENGTH_SHORT).show()
             }
         // [END rtdb_write_new_user_task]
     }
