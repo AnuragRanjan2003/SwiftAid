@@ -48,22 +48,12 @@ class OrganisationSignUpFragment : Fragment() {
         binding = FragmentOrganisationSignUpBinding.inflate(inflater, container, false)
 
         binding.btnSignUp.setOnClickListener {
-            if(binding.emailIdLabel.text.toString().isNotEmpty() &&
-                    binding.passwordLabel.text.toString().isNotEmpty() &&
-                    binding.nameOrgLabel.text.toString().isNotEmpty() &&
-                    binding.orgAddressLabel.text.toString().isNotEmpty() &&
-                    binding.affCodeLabel.text.toString().isNotEmpty()){
-                val email = binding.emailIdLabel.text.toString()
-                val password = binding.passwordLabel.text.toString()
-                name = binding.nameOrgLabel.text.toString()
-                address = binding.orgAddressLabel.text.toString()
-                affiliationCode = binding.affCodeLabel.text.toString()
-                initAuth(email, password)
-            }
-            else{
-                Toast.makeText(context,"Please fill the required details",Toast.LENGTH_SHORT)
-                    .show()
-            }
+            val email = binding.emailIdLabel.text.toString()
+            val password = binding.passwordLabel.text.toString()
+            name = binding.nameOrgLabel.text.toString()
+            address = binding.orgAddressLabel.text.toString()
+            affiliationCode = binding.affCodeLabel.text.toString()
+            initAuth(email, password)
 
         }
 
@@ -89,12 +79,12 @@ class OrganisationSignUpFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.e("VerificationResult", "createUserWithEmail:success")
+                    Log.d("VerificationResult", "createUserWithEmail:success")
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.e("VerificationResult", "createUserWithEmail:failure", task.exception)
+                    Log.w("VerificationResult", "createUserWithEmail:failure", task.exception)
                 }
             }
         // [END create_user_with_email]

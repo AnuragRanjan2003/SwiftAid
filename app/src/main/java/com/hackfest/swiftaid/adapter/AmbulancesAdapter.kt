@@ -53,6 +53,9 @@ class AmbulancesAdapter(private val onComplete: (String) -> Unit) :
         holder.binding.root.setOnClickListener {
                     onComplete(ambulance.vehicleNumber!!)
 
+
+
+
         }
     }
 
@@ -67,7 +70,6 @@ class AmbulancesAdapter(private val onComplete: (String) -> Unit) :
 
     fun setFilteredList(ambulanceList: ArrayList<Ambulance>) {
         this.ambulanceList.clear()
-        notifyItemRangeRemoved(0,this.ambulanceList.lastIndex)
         this.ambulanceList = ambulanceList
         notifyItemRangeInserted(0, ambulanceList.lastIndex)
     }
