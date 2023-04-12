@@ -1,129 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#D4FFEA"
+    android:orientation="vertical"
+    tools:context=".fragments.authentication.user.UserOtpFragment">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvVerifying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/regular"
+        android:text="Verifying...."
+        android:textColor="#00BF63"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#D4FFEA"
-        android:orientation="vertical"
-        tools:context=".fragments.authentication.user.UserOtpFragment">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/regular"
+        android:padding="8dp"
+        android:text="Waiting to automatically detect an SMS sent to"
+        android:textAlignment="center"
+        android:textColor="#02924D"
+        android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/tvVerifying"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/regular"
-            android:text="Verifying...."
-            android:textColor="#00BF63"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvVerify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/regular"
+        android:gravity="center"
+        android:padding="4dp"
+        android:textColor="#02924D"
+        android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/regular"
-            android:padding="8dp"
-            android:text="Waiting to automatically detect an SMS sent to"
-            android:textAlignment="center"
-            android:textColor="#02924D"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/tvVerify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/regular"
-            android:gravity="center"
-            android:padding="4dp"
-            android:textColor="#02924D"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvCounter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/regular"
-            android:gravity="center"
-            android:padding="4dp"
-            android:textColor="#028B49"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/tvCounter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/regular"
+        android:gravity="center"
+        android:padding="4dp"
+        android:textColor="#028B49"
+        android:textSize="16sp" />
 
 
-        <EditText
-            android:id="@+id/etCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="26dp"
-            android:background="@drawable/edit_text_shape"
-            android:fontFamily="@font/regular"
-            android:hint="------"
-            android:imeActionId="6"
-            android:imeActionLabel="Send"
-            android:imeOptions="actionUnspecified"
-            android:inputType="phone"
-            android:letterSpacing="0.8"
-            android:maxLength="6"
-            android:maxLines="1"
-            android:minHeight="48dp"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+    <EditText
+        android:id="@+id/etCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/edit_text_shape"
+        android:fontFamily="@font/regular"
+        android:hint="------"
+        android:imeActionId="6"
+        android:imeActionLabel="Send"
+        android:imeOptions="actionUnspecified"
+        android:inputType="phone"
+        android:letterSpacing="0.8"
+        android:maxLength="6"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
 
-        <TextView
-            android:id="@+id/tvCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/regular"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="Enter 6- digit code"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/tvCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/regular"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Enter 6- digit code"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnVerify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="80dp"
-            android:background="@drawable/rectangle_5"
-            android:fontFamily="@font/bold"
-            android:padding="15dp"
-            android:text="Verify OTP"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="17sp" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rectangle_5"
+        android:fontFamily="@font/bold"
+        android:padding="15dp"
+        android:text="Verify OTP"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnResend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/rectangle_4"
-            android:enabled="false"
-            android:padding="15dp"
-            android:text="Resend OTP"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="17sp" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnResend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rectangle_4"
+        android:enabled="false"
+        android:padding="15dp"
+        android:text="Resend OTP"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
 
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

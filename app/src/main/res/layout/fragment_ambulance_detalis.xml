@@ -1,176 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tvAddAmbulance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ambulance Details"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgAmbulance1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvAddAmbulance"
+        android:src="@drawable/ambu_4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+    <!-- Text Input Layout for vehicle number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/vehicle_number_text_input_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Vehicle Number"
+        android:layout_below="@+id/imgAmbulance1"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxBackgroundMode="outline">
 
-        <TextView
-            android:id="@+id/tvAddAmbulance"
+        <!-- EditText for vehicle number -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/vehicle_number_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout for driver name -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/driver_name_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vehicle_number_text_input_layout"
+        android:layout_margin="16dp"
+        android:hint="Driver Name"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxBackgroundMode="outline">
+
+        <!-- EditText for driver name -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/driver_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout for driver number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/driver_number_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/driver_name_text_input_layout"
+        android:layout_margin="16dp"
+        android:hint="Driver Number"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxBackgroundMode="outline">
+
+        <!-- EditText for driver number -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/driver_number_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvEquipments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Amenities"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:textColor="#008947"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/driver_number_text_input_layout"/>
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipFilterGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEquipments"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipVentilator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Ambulance Details"
-            android:textStyle="bold"
-            android:textSize="30dp"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="Ventilator"
             android:textColor="@color/black"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"/>
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgAmbulance1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvAddAmbulance"
-            android:src="@drawable/ambu_4"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"/>
-        <!-- Text Input Layout for vehicle number -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/vehicle_number_text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:hint="Vehicle Number"
-            android:layout_below="@+id/imgAmbulance1"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxBackgroundMode="outline">
-
-            <!-- EditText for vehicle number -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/vehicle_number_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Text Input Layout for driver name -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/driver_name_text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/vehicle_number_text_input_layout"
-            android:layout_margin="16dp"
-            android:hint="Driver Name"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxBackgroundMode="outline">
-
-            <!-- EditText for driver name -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/driver_name_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Text Input Layout for driver number -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/driver_number_text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/driver_name_text_input_layout"
-            android:layout_margin="16dp"
-            android:hint="Driver Number"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxBackgroundMode="outline">
-
-            <!-- EditText for driver number -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/driver_number_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvEquipments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Amenities"
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:textColor="#008947"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/driver_number_text_input_layout"/>
-
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipFilterGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvEquipments"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            app:singleSelection="false">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVentilator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Ventilator"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginEnd="16sp"
-                app:chipBackgroundColor="@color/bg_chip_state_list"/>
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSuctionUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="Suction Unit"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginEnd="16sp"
-                app:chipBackgroundColor="@color/bg_chip_state_list"/>
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipECG"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:text="ECG Monitor"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginEnd="16sp"
-                app:chipBackgroundColor="@color/bg_chip_state_list"/>
-
-        </com.google.android.material.chip.ChipGroup>
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnContinue"
-            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="16sp"
+            app:chipBackgroundColor="@color/bg_chip_state_list"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSuctionUnit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Continue"
-            android:width="200dp"
-            android:textColor="@color/white"
-            android:backgroundTint="#00BF63"
-            app:cornerRadius="26.92dp"
-            android:layout_below="@+id/driver_number_text_input_layout"
-            android:layout_marginTop="150sp"/>
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="Suction Unit"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginEnd="16sp"
+            app:chipBackgroundColor="@color/bg_chip_state_list"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipECG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:text="ECG Monitor"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginEnd="16sp"
+            app:chipBackgroundColor="@color/bg_chip_state_list"/>
 
-    </RelativeLayout>
+    </com.google.android.material.chip.ChipGroup>
 
-</ScrollView>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinue"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:width="200dp"
+        android:textColor="@color/white"
+        android:backgroundTint="#00BF63"
+        app:cornerRadius="26.92dp"
+        android:layout_below="@+id/driver_number_text_input_layout"
+        android:layout_marginTop="150sp"/>
+
+</RelativeLayout>
 

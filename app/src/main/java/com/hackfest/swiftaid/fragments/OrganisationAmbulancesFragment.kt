@@ -1,7 +1,5 @@
 package com.hackfest.swiftaid.fragments
 
-import android.app.Dialog
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings.Global.putString
 import android.util.Log
@@ -16,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.SearchView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -26,8 +23,6 @@ import com.hackfest.swiftaid.databinding.FragmentOrganisationAmbulancesBinding
 import com.hackfest.swiftaid.models.Ambulance
 import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.factory.AmbulanceViewModelFactory
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class OrganisationAmbulancesFragment : Fragment() {
@@ -42,7 +37,6 @@ class OrganisationAmbulancesFragment : Fragment() {
     private val bundle = Bundle()
     private val ambulanceList = ArrayList<Ambulance>()
     lateinit var adapter: AmbulancesAdapter
-    private lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +44,8 @@ class OrganisationAmbulancesFragment : Fragment() {
 //        e("org",orgAuthID.toString())
 //        auth = Firebase.auth
 //        orgAuthID = auth.currentUser!!.uid
+
+
     }
 
     override fun onCreateView(
@@ -58,15 +54,6 @@ class OrganisationAmbulancesFragment : Fragment() {
     ): View? {
 
         binding = FragmentOrganisationAmbulancesBinding.inflate(inflater, container, false)
-
-        dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.progress_dialog)
-        if(dialog.window != null){
-            dialog.window?.setBackgroundDrawable(ColorDrawable(0))
-        }
-        dialog.setCancelable(false)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.show()
 
         return binding.root
     }
@@ -111,15 +98,15 @@ class OrganisationAmbulancesFragment : Fragment() {
             for (i in it) {
                 if (i.orgAuthID == orgAuthID) {
 
-                    e("Data added", "${i.driverName}")
+                    Log.e("Data added", "${i.driverName}")
                     ambulanceList.add(i)
                 }
             }
             e("list","$ambulanceList")
             adapter.updateAmbulanceList(ambulanceList)
-            dialog.dismiss()
         })
-        binding.searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
+        binding.searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -145,18 +132,14 @@ class OrganisationAmbulancesFragment : Fragment() {
         if (query != null) {
             val filteredList = ArrayList<Ambulance>()
             for (i in ambulanceList) {
-                e("ambulance:Search","${i.driverName}")
-                if (i.driverName?.toLowerCase(Locale.getDefault())!!.contains(query.toLowerCase(Locale.getDefault()))) {
-                    e("ambulance:SearchDriver","${i.driverName}")
+                if (i.driverName == query) {
                     filteredList.add(i)
                 }
             }
-            adapter.notifyDataSetChanged()
 
-            if (filteredList.isEmpty() && ambulanceList.isNotEmpty()) {
+            if (filteredList.isEmpty() && ambulanceList.isEmpty()) {
                 Toast.makeText(context,"No data found",Toast.LENGTH_SHORT).show()
             } else {
-                e("ambulance:SearchDriverList","error in search")
                 adapter.setFilteredList(filteredList)
             }
         }
