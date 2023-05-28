@@ -22,7 +22,8 @@ This is an digital  healthcare android application for Hackfest IIT ISM 2023.
    8. Retrofit
    
 ## 4. APIs Used
-   1. OpenWeatherAPIs ( Places ) - To fetch nearby hospitals 
+   1. GoogleMapsAPI - To display googleMap
+   2. OpenWeatherAPIs ( Places ) - To fetch nearby hospitals 
  
 ## 5. Members
    Team **Siren Squad**
