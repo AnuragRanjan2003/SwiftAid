@@ -9,16 +9,22 @@
         android:id="@+id/splashFragment"
         android:name="com.hackfest.swiftaid.fragments.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_askFragment"
             app:destination="@id/askFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_SOSFragment"
+            app:destination="@id/SOSFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
     </fragment>
     <fragment
         android:id="@+id/askFragment"
         android:name="com.hackfest.swiftaid.fragments.AskFragment"
         android:label="fragment_ask"
-        tools:layout="@layout/fragment_ask" >
+        tools:layout="@layout/fragment_ask">
         <action
             android:id="@+id/action_askFragment_to_userLoginFragment"
             app:destination="@id/userLoginFragment" />
@@ -30,7 +36,7 @@
         android:id="@+id/userLoginFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.user.UserLoginFragment"
         android:label="fragment_user_login"
-        tools:layout="@layout/fragment_user_login" >
+        tools:layout="@layout/fragment_user_login">
         <action
             android:id="@+id/action_userLoginFragment_to_userOtpFragment"
             app:destination="@id/userOtpFragment" />
@@ -39,7 +45,7 @@
         android:id="@+id/organisationAskFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationAskFragment"
         android:label="fragment_organization_ask"
-        tools:layout="@layout/fragment_organization_ask" >
+        tools:layout="@layout/fragment_organization_ask">
         <action
             android:id="@+id/action_organisationAskFragment_to_organisationLoginFragment"
             app:destination="@id/organisationLoginFragment" />
@@ -51,17 +57,29 @@
         android:id="@+id/organisationLoginFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationLoginFragment"
         android:label="fragment_organisation_login"
-        tools:layout="@layout/fragment_organisation_login" />
+        tools:layout="@layout/fragment_organisation_login" >
+        <action
+            android:id="@+id/action_organisationLoginFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/organisationSignUpFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.organisation.OrganisationSignUpFragment"
         android:label="fragment_organisation_sign_up"
-        tools:layout="@layout/fragment_organisation_sign_up" />
+        tools:layout="@layout/fragment_organisation_sign_up" >
+        <action
+            android:id="@+id/action_organisationSignUpFragment_to_organisationAmbulancesFragment"
+            app:destination="@id/organisationAmbulancesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userOtpFragment"
         android:name="com.hackfest.swiftaid.fragments.authentication.user.UserOtpFragment"
         android:label="fragment_user_otp"
-        tools:layout="@layout/fragment_user_otp" >
+        tools:layout="@layout/fragment_user_otp">
+        <action
+            android:id="@+id/action_userOtpFragment_to_userLoginFragment"
+            app:destination="@id/userLoginFragment"
+            app:launchSingleTop="true" />
         <action
             android:id="@+id/action_userOtpFragment_to_nearByFragment"
             app:destination="@id/nearByFragment" />
@@ -70,5 +88,51 @@
         android:id="@+id/nearByFragment"
         android:name="com.hackfest.swiftaid.fragments.map.NearByFragment"
         android:label="fragment_near_by"
-        tools:layout="@layout/fragment_near_by" />
+        tools:layout="@layout/fragment_near_by" >
+        <action
+            android:id="@+id/action_nearByFragment_to_trackingfragment"
+            app:destination="@id/trackingfragment" />
+        <action
+            android:id="@+id/action_nearByFragment_to_trackingfragment2"
+            app:destination="@id/trackingfragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackingfragment"
+        android:name="com.hackfest.swiftaid.fragments.maps.trackingfragment"
+        android:label="fragment_trackingfragment"
+        tools:layout="@layout/fragment_trackingfragment" />
+    <fragment
+        android:id="@+id/organisationAmbulancesFragment"
+        android:name="com.hackfest.swiftaid.fragments.OrganisationAmbulancesFragment"
+        android:label="fragment_organisation_ambulances"
+        tools:layout="@layout/fragment_organisation_ambulances" >
+        <action
+            android:id="@+id/action_organisationAmbulancesFragment_to_ambulanceDetailsFragment2"
+            app:destination="@id/ambulanceDetailsFragment2" />
+        <action
+            android:id="@+id/action_organisationAmbulancesFragment_to_ambulanceMapFragment"
+            app:destination="@id/ambulanceMapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ambulanceDetailsFragment2"
+        android:name="com.hackfest.swiftaid.fragments.AmbulanceDetailsFragment"
+        android:label="AmbulanceDetailsFragment" >
+        <action
+            android:id="@+id/action_ambulanceDetailsFragment2_to_splashFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ambulanceMapFragment"
+        android:name="com.hackfest.swiftaid.fragments.map.AmbulanceMapFragment"
+        android:label="fragment_ambulance_map"
+        tools:layout="@layout/fragment_ambulance_map" />
+    <fragment
+        android:id="@+id/SOSFragment"
+        android:name="com.hackfest.swiftaid.fragments.SOSFragment"
+        android:label="fragment_s_o_s"
+        tools:layout="@layout/fragment_s_o_s" >
+        <action
+            android:id="@+id/action_SOSFragment_to_nearByFragment"
+            app:destination="@id/nearByFragment" />
+    </fragment>
 </navigation>

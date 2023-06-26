@@ -3,20 +3,27 @@ package com.hackfest.swiftaid.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentSplashBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SplashFragment : Fragment() {
-   private lateinit var binding: FragmentSplashBinding
+    private lateinit var binding: FragmentSplashBinding
+    val auth = Firebase.auth
+    val cu = auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -25,10 +32,24 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSplashBinding.inflate(inflater,container,false)
+        binding = FragmentSplashBinding.inflate(inflater, container, false)
         binding.getStarted.setOnClickListener {
-
-            findNavController().navigate(R.id.askFragment)
+            if (cu != null) {
+                val providedata = cu.providerData
+                var hasG = false
+                for (userInfo in providedata) {
+                    if (userInfo.providerId == GoogleAuthProvider.PROVIDER_ID) {
+                        hasG = true
+                        break
+                    }
+                }
+                if (hasG) {
+                    findNavController().navigate(R.id.action_splashFragment_to_SOSFragment)
+                } else {
+                    findNavController().navigate(R.id.action_splashFragment_to_organisationAmbulancesFragment)
+                }
+            } else
+                findNavController().navigate(R.id.askFragment)
 
         }
 

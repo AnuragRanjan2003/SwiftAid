@@ -1,13 +1,13 @@
 package com.hackfest.swiftaid.fragments.authentication.user
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -36,8 +36,8 @@ class UserLoginFragment : Fragment() {
     private var phoneNumber: String = ""
     private lateinit var number: String
     private lateinit var binding: FragmentUserLoginBinding
-    private lateinit var mProgressbar: ProgressBar
     private var OTP: String = ""
+    private lateinit var progressDialog: ProgressDialog
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private var bundle: Bundle = Bundle()
 
@@ -54,16 +54,17 @@ class UserLoginFragment : Fragment() {
         val nc = findNavController()
 
 
-
-        bundle.putString("Phone Number", phoneNumber)
-        mProgressbar = binding.phoneProgressBar
-        mProgressbar.visibility = View.INVISIBLE
+//        mProgressbar = binding.phoneProgressBar
+//        mProgressbar.visibility = View.INVISIBLE
         binding.sendOtpButton.setOnClickListener {
+
             number = binding.phoneInput.text.toString()
             phoneNumber = binding.countryCodeLabel.text.toString() + number
             Log.e("number", number)
             if (number.isNotEmpty()) {
-                mProgressbar.visibility = View.VISIBLE
+                bundle.putString("Phone Number", phoneNumber)
+                progressDialog = createProgressDialog("Please wait....", false)
+                progressDialog.show()
                 val options = PhoneAuthOptions.newBuilder(auth)
                     .setPhoneNumber(phoneNumber)       // Phone number to verify
                     .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -73,11 +74,10 @@ class UserLoginFragment : Fragment() {
                 PhoneAuthProvider.verifyPhoneNumber(options)
 
             } else {
-                mProgressbar.visibility = View.INVISIBLE
                 Toast.makeText(this.context, "Please Enter Your Number", Toast.LENGTH_SHORT).show()
                 binding.sendOtpButton.isEnabled = false
             }
-            mProgressbar.visibility = View.INVISIBLE
+
             binding.continueButton.setOnClickListener {
                 Log.e("otp", OTP)
                 bundle.putString("OTP", OTP)
@@ -132,7 +132,7 @@ class UserLoginFragment : Fragment() {
             if (it.isSuccessful) {
                 //Update the UI
                 Toast.makeText(this.context, "Logged In Successfully !", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.nearByFragment)
+                findNavController().navigate(R.id.SOSFragment)
             } else {
                 Toast.makeText(this.context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -169,24 +169,27 @@ class UserLoginFragment : Fragment() {
             // 2 - Auto-retrieval. On some devices Google Play services can automatically
             //     detect the incoming verification SMS and perform verification without
             //     user action.
-            Log.d(ContentValues.TAG, "onVerificationCompleted:$credential")
+            Log.e(ContentValues.TAG, "onVerificationCompleted:$credential")
             signInWithPhoneAuthCredential(credential)
         }
 
+
         override fun onVerificationFailed(e: FirebaseException) {
+            progressDialog.dismiss()
+            Toast.makeText(context,"Please Sign In through GOOGLE", Toast.LENGTH_SHORT).show()
             // This callback is invoked in an invalid request for verification is made,
             // for instance if the the phone number format is not valid.
-            Log.w(ContentValues.TAG, "onVerificationFailed", e)
+            Log.e(ContentValues.TAG, "onVerificationFailed", e)
 
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
                 // reCAPTCHA verification attempted with null Activity
-                Log.d(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
+                Log.e(ContentValues.TAG, "onVerificationFailed: ${e.toString()}")
             }
 
             // Show a message and update the UI
@@ -205,6 +208,7 @@ class UserLoginFragment : Fragment() {
             binding.sendOtpButton.visibility = View.INVISIBLE
             binding.continueButton.visibility = View.VISIBLE
 
+            progressDialog.dismiss()
 //                if (::resendToken.isInitialized) {
 //                     putParcelable("resendToken", resendToken)
 //                 }
@@ -219,5 +223,13 @@ class UserLoginFragment : Fragment() {
 
     }
 
+    fun Fragment.createProgressDialog(message: String, isCancelable: Boolean): ProgressDialog {
+        return android.app.ProgressDialog(this.requireContext()).apply {
+            setCancelable(false)
+            setMessage(message)
+            setCanceledOnTouchOutside(false)
+        }
 
+
+    }
 }

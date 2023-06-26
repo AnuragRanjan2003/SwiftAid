@@ -1,37 +1,53 @@
 package com.hackfest.swiftaid.fragments.map
 
 import android.os.Bundle
-import android.util.Log
+import android.util.Log.e
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.maps.android.SphericalUtil
+import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentBottomSheetBinding
+import com.hackfest.swiftaid.fragments.maps.trackingfragment
+import com.hackfest.swiftaid.models.Ambulance
+import com.hackfest.swiftaid.models.NearestAmbulanceData
 import com.hackfest.swiftaid.models.Request
+import com.hackfest.swiftaid.models.Success
 import com.hackfest.swiftaid.repository.Repository
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Calendar.getInstance
+import javax.inject.Inject
 import kotlin.math.floor
 
-
+@AndroidEntryPoint
 class BottomSheetFragment : BottomSheetDialogFragment() {
     private var placeName: String? = ""
     private var dest_Loc: LatLng? = null
     private var my_Loc: LatLng? = null
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var binding: FragmentBottomSheetBinding
+    private var vn = ""
+    private lateinit var trackingfragment: trackingfragment
+    @Inject
+    lateinit var ambulance: NearestAmbulanceData
+    @Inject
+    lateinit var repo: Repository
+    private var amb = ArrayList<Ambulance>()
 
+    private lateinit var binding: FragmentBottomSheetBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            this.placeName = it.getString("place")
+            placeName = it.getString("place")
             it.getDoubleArray("loc")?.apply {
                 dest_Loc = LatLng(this[0], this[1])
             }
@@ -40,6 +56,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             }
 
         }
+
+
         mAuth = Firebase.auth
 
 
@@ -49,13 +67,21 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
-
-        binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
+        ambulance.getambulancelist {
+            amb = it
+        }
         binding.place.text = placeName
         binding.dist.text = getDistance(my_Loc, dest_Loc)
+        trackingfragment = trackingfragment()
+
 
         binding.btnRequest.setOnClickListener {
+
+            val nc = findNavController()
+
+
             var uid: String = ""
             uid = if (mAuth.currentUser == null) ""
             else mAuth.uid!!
@@ -66,20 +92,47 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
                 ecgMonitor = binding.ecg.isChecked,
                 suctionUnit = binding.suck.isChecked,
                 userID = uid,
-                destName = placeName!!,
                 destinationLat = dest_Loc!!.latitude,
                 destinationLng = dest_Loc!!.longitude,
                 date = getDate(),
                 acceptedBy = ""
             )
-            Log.e("request", "$request")
-            val repo = Repository()
+            e("request", "$request")
+
             repo.postRequest(request, requireActivity().applicationContext) {
-                dismiss()
-                Toast.makeText(context, "posted", Toast.LENGTH_LONG).show()
+
+                Toast.makeText(context, "request posted", Toast.LENGTH_LONG).show()
+            }
+            ambulance.getNearestAmbulance(
+                my_Loc!!.latitude,
+                my_Loc!!.longitude,
+                binding.vent.isChecked,
+                binding.suck.isChecked,
+                amb
+            ) {
+                if (it is Success<Ambulance>) {
+                    vn = it.data.vehicleNumber!!
+                    val bundle = Bundle()
+                    bundle.putString("vn", vn)
+                    bundle.putBoolean("ac", request.ecgMonitor)
+                    bundle.putBoolean("ventilator", request.ventilator)
+                    bundle.putString("request", request.requestID)
+                    trackingfragment.arguments = bundle
+                    Toast.makeText(context,"ambulance on the way",Toast.LENGTH_SHORT).show()
+                    nc.navigate(R.id.action_nearByFragment_to_trackingfragment, bundle)
+                }else{
+                    Toast.makeText(context,"no ambulance found nearby", Toast.LENGTH_LONG).show()
+                    e("bottom","no ambulance found")
+                }
+
             }
 
+
         }
+
+
+
+
 
         return binding.root
     }
@@ -98,7 +151,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun getDate(): String {
-        val c: Date = Calendar.getInstance().time
+        val c: Date = getInstance().time
 
         val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         return df.format(c)
