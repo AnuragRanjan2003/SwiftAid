@@ -20,6 +20,7 @@ This is an digital  healthcare android application for Hackfest IIT ISM 2023.
    6. MVVM
    7. Kotlin Coroutines
    8. Retrofit
+   9. Dagger -Hilt
    
 ## 4. APIs Used
    1. GoogleMapsAPI - To display googleMap
