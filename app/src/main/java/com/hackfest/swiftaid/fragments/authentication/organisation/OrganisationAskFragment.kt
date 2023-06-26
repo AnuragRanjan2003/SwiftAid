@@ -9,8 +9,9 @@ import androidx.navigation.fragment.findNavController
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentOrganizationAskBinding
 import com.hackfest.swiftaid.databinding.FragmentUserLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OrganisationAskFragment : Fragment() {
 
     private lateinit var binding: FragmentOrganizationAskBinding

@@ -7,8 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.hackfest.swiftaid.models.LocationLiveData
 import com.hackfest.swiftaid.models.Request
 import com.hackfest.swiftaid.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AmbulanceMapFragmentViewModel(private val repo: Repository, private val app: Application) :
+
+@HiltViewModel
+class AmbulanceMapFragmentViewModel @Inject constructor(private val repo: Repository, app: Application) :
     ViewModel() {
     private val locationLiveData = LocationLiveData(app)
     private val reqId = MutableLiveData<String>()

@@ -5,28 +5,31 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.google.firebase.auth.FirebaseAuth
 import com.hackfest.swiftaid.models.Ambulance
 import com.hackfest.swiftaid.models.NearestAmbulanceData
+import com.hackfest.swiftaid.models.Resource
+import com.hackfest.swiftaid.models.Success
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class UserAmbulanceViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class UserAmbulanceViewModel @Inject constructor(val auth: FirebaseAuth,val nearestAmbulanceData : NearestAmbulanceData ) : ViewModel() {
 
-    private val nearestAmbulanceData = NearestAmbulanceData()
     private val ambulancelist = MutableLiveData<ArrayList<Ambulance>>()
     private val ambulanceList = MutableLiveData<ArrayList<Ambulance>>()
-    private val nearestAmbulance = MutableLiveData<Ambulance>()
+    private val nearestAmbulance = MutableLiveData<Resource<Ambulance>>()
 
     fun getAmbulanceList(
-        auth: FirebaseAuth,
         map: GoogleMap,
         marker: Marker
     ): MutableLiveData<ArrayList<Ambulance>> {
-        nearestAmbulanceData.getAmbulanceList(auth, marker, map) { list ->
+        nearestAmbulanceData.getAmbulanceList(marker, map) { list ->
             ambulanceList.value = list
-
         }
         return ambulanceList
 
@@ -54,8 +57,8 @@ class UserAmbulanceViewModel(application: Application) : AndroidViewModel(applic
                 ac,
                 ventilator,
                 ambulancelist.value!!
-            ) { nearestambulance ->
-                nearestAmbulance.value = nearestambulance
+            ) { res ->
+                nearestAmbulance.value = res
             }
         }
     }
@@ -73,8 +76,7 @@ class UserAmbulanceViewModel(application: Application) : AndroidViewModel(applic
         return ambulanceList
     }
 
-    fun getNearestAmbulanceLiveData(): LiveData<Ambulance> {
-        return nearestAmbulance
-    }
+    fun getNearestAmbulanceLiveData(): LiveData<Resource<Ambulance>>  =  nearestAmbulance
+
 
 }

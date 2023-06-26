@@ -14,6 +14,27 @@ This is an digital  healthcare android application for Hackfest IIT ISM 2023.
 
    1. Kotlin
    2. XML
+   3. Firebase ( Authentication , Realtime Database )
+   4. Navigation Components
+   5. Google Maps
+   6. MVVM
+   7. Kotlin Coroutines
+   8. Retrofit
+   
+## 4. APIs Used
+   1. GoogleMapsAPI - To display googleMap
+   2. OpenWeatherAPIs ( Places ) - To fetch nearby hospitals 
+ 
+## 5. Members
+   The ambulance service system is a crucial aspect of emergency medical care. However, traditional methods of accessing ambulance services, such as calling the emergency l    hotline or flagging down an ambulance on the street, can be inefficient and time-consuming, leading to delays in receiving critical medical care. To address this issue,      we propose the development of an ambulance service app that streamlines the process of requesting an ambulance while providing users with more transparency and control      over  the ambulance service they receive.
+   
+   
+ ![screenshot1-merged](https://github.com/AnuragRanjan2003/SwiftAid/assets/100191258/0aeed033-b230-41bb-a200-03a77f844c6f)
+ 
+## 3. TechStack
+
+   1. Kotlin
+   2. XML
    3. Firebase ( Authentication , Realtime Datbase )
    4. Navigation Components
    5. Google Maps

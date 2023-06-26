@@ -15,8 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentOrganisationLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OrganisationLoginFragment : Fragment() {
 
     private lateinit var binding: FragmentOrganisationLoginBinding

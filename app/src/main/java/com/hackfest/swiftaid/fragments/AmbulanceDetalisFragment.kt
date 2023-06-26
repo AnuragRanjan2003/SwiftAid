@@ -12,7 +12,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentAmbulanceDetalisBinding
 import com.hackfest.swiftaid.models.Ambulance
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AmbulanceDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentAmbulanceDetalisBinding

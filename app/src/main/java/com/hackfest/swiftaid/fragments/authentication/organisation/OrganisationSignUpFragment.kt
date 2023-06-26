@@ -15,8 +15,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentOrganisationSignUpBinding
 import com.hackfest.swiftaid.models.Organisation
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OrganisationSignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentOrganisationSignUpBinding

@@ -1,6 +1,7 @@
 package com.hackfest.swiftaid.models
 
 import android.util.Log
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -13,11 +14,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.maps.android.SphericalUtil
 import com.hackfest.swiftaid.R
+import com.hackfest.swiftaid.constants.MAP_ZOOM
+import java.lang.IndexOutOfBoundsException
 
-class NearestAmbulanceData() {
+class NearestAmbulanceData(val auth: FirebaseAuth, val database: FirebaseDatabase) {
 
     fun getAmbulanceList(
-        auth: FirebaseAuth,
         userLocationMarker: Marker,
         map: GoogleMap,
         onResult: (ArrayList<Ambulance>) -> Unit
@@ -73,10 +75,10 @@ class NearestAmbulanceData() {
         })
     }
 
+
     fun getambulancelist(onResult: (ArrayList<Ambulance>) -> Unit) {
-        val myRef =
-            FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
-                .getReference("ambulance")
+        database
+            .getReference("ambulance")
 //        myRef.addValueEventListener(object : ValueEventListener {
 //            override fun onDataChange(snapshot: DataSnapshot) {
 //                val ambulanceList = ArrayList<Ambulance>()
@@ -101,24 +103,24 @@ class NearestAmbulanceData() {
 //                Log.e("getAmbulanceList", error.toString())
 //            }
 //        })
-        myRef.get().addOnSuccessListener {snapshot->
-            val ambulanceList = ArrayList<Ambulance>()
-            if (snapshot.exists()) {
-                for (datasnapshot in snapshot.children) {
-                    if ((!ambulanceList.contains(datasnapshot.getValue(Ambulance::class.java)))) {
-                        val ambulance = datasnapshot.getValue(Ambulance::class.java)
-                        if (!ambulance!!.busy!!) {
-                            ambulance.let {
-                                ambulanceList.add(it)
+            .get().addOnSuccessListener { snapshot ->
+                val ambulanceList = ArrayList<Ambulance>()
+                if (snapshot.exists()) {
+                    for (datasnapshot in snapshot.children) {
+                        if ((!ambulanceList.contains(datasnapshot.getValue(Ambulance::class.java)))) {
+                            val ambulance = datasnapshot.getValue(Ambulance::class.java)
+                            if (!ambulance!!.busy!!) {
+                                ambulance.let {
+                                    ambulanceList.add(it)
+                                }
                             }
                         }
                     }
                 }
+                onResult(ambulanceList)
+
+
             }
-            onResult(ambulanceList)
-
-
-        }
 
     }
 
@@ -129,15 +131,15 @@ class NearestAmbulanceData() {
         ac: Boolean,
         ventilator: Boolean,
         ambulanceList: ArrayList<Ambulance>,
-        onResult: (Ambulance) -> Unit
+        onResult: (Resource<Ambulance>) -> Unit
 
     ) {
         val lat = lat
-        var nearambulance: Ambulance
+        var nearambulance : Resource<Ambulance> = Failure<Ambulance>("not found")
         val lon = lon
 
         val userLocation = LatLng(lat.toDouble(), lon.toDouble())
-        nearambulance = ambulanceList[0]
+
         var distance = 100000000000.000
         for (a in ambulanceList) {
             if (a.ecgMonitor == ac && a.suctionUnit == ventilator) {
@@ -150,7 +152,7 @@ class NearestAmbulanceData() {
                         userLocation,
                         LatLng(a.lattitude!!.toDouble(), a.lattitude!!.toDouble())
                     )
-                    nearambulance = a
+                    nearambulance = Success(a)
                 }
             }
         }
@@ -170,38 +172,41 @@ class NearestAmbulanceData() {
     }
 
     fun marknearestambulance(nearambulance: Ambulance, map: GoogleMap) {
-        val myRef =
-            FirebaseDatabase.getInstance("https://swiftaid-hackfest-default-rtdb.firebaseio.com/")
-                .getReference("ambulance")
-        myRef.addValueEventListener(object : ValueEventListener {
+        database
+            .getReference("ambulance")
+            .addValueEventListener(object : ValueEventListener {
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.e("vehiclenumber22", nearambulance.lonbgitude.toString())
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.e("vehiclenumber22", nearambulance.lonbgitude.toString())
 
-                if (snapshot.exists()) {
-                    for (datasnapshot in snapshot.children) {
-                        val ambulance = datasnapshot.getValue(Ambulance::class.java)
-                        if (ambulance!!.vehicleNumber == nearambulance.vehicleNumber) {
-                            val markerColor = BitmapDescriptorFactory.HUE_AZURE
-                            val markerOptions = MarkerOptions()
-                                .position(
-                                    LatLng(
-                                        ambulance.lattitude!!.toDouble(),
-                                        ambulance.lonbgitude!!.toDouble()
+                    if (snapshot.exists()) {
+                        for (datasnapshot in snapshot.children) {
+                            val ambulance = datasnapshot.getValue(Ambulance::class.java)
+                            if (ambulance!!.vehicleNumber == nearambulance.vehicleNumber) {
+                                val markerColor = BitmapDescriptorFactory.HUE_AZURE
+                                val markerOptions = MarkerOptions()
+                                    .position(
+                                        LatLng(
+                                            ambulance.lattitude!!.toDouble(),
+                                            ambulance.lonbgitude!!.toDouble()
+                                        )
                                     )
-                                )
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulancemarker))
-                                .title(ambulance.driverName)
-                            map.addMarker(markerOptions)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ambulancemarker))
+                                    .title(ambulance.driverName)
+                                map.addMarker(markerOptions)Anurag
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    LatLng(ambulance.lattitude!!.toDouble(),ambulance.lonbgitude!!.toDouble()),
+                                    MAP_ZOOM
+                               ))
+                            }
                         }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("getAmbulanceList", error.toString())
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("getAmbulanceList", error.toString())
+                }
+            })
 
     }
 

@@ -23,8 +23,9 @@ import com.hackfest.swiftaid.databinding.FragmentOrganisationAmbulancesBinding
 import com.hackfest.swiftaid.models.Ambulance
 import com.hackfest.swiftaid.viewModels.AmbulanceViewModel
 import com.hackfest.swiftaid.viewModels.factory.AmbulanceViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OrganisationAmbulancesFragment : Fragment() {
 
     private lateinit var binding: FragmentOrganisationAmbulancesBinding

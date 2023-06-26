@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,19 +30,21 @@ import com.hackfest.swiftaid.databinding.FragmentAmbulanceMapBinding
 import com.hackfest.swiftaid.repository.Repository
 import com.hackfest.swiftaid.viewModels.AmbulanceMapFragmentViewModel
 import com.hackfest.swiftaid.viewModels.factory.AmbulanceFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
 
 
+@AndroidEntryPoint
 class AmbulanceMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentAmbulanceMapBinding
     private var map: GoogleMap? = null
     private var ambuMarker: Marker? = null
     private var userMarker: Marker? = null
     private var destMarker: Marker? = null
-    private lateinit var repository: Repository
-    private lateinit var factory: AmbulanceFactory
+
+
     private var ambuId: String = ""
-    private lateinit var viewModel: AmbulanceMapFragmentViewModel
+    private val viewModel by viewModels<AmbulanceMapFragmentViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +75,7 @@ class AmbulanceMapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentAmbulanceMapBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
-        repository = Repository()
-        factory = AmbulanceFactory(repository, requireActivity().application)
-        viewModel = ViewModelProvider(this, factory)[AmbulanceMapFragmentViewModel::class.java]
+
 
         prepLocationUpdates()
         viewModel.startLocationLiveUpdates()

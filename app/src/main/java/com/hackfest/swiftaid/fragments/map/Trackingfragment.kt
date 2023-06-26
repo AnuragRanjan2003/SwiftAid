@@ -13,7 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -22,36 +22,30 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.constants.MAP_ZOOM
 import com.hackfest.swiftaid.databinding.FragmentTrackingfragmentBinding
 import com.hackfest.swiftaid.models.Ambulance
-import com.hackfest.swiftaid.models.NearestAmbulanceData
-import com.hackfest.swiftaid.repository.Repository
+import com.hackfest.swiftaid.models.Failure
+import com.hackfest.swiftaid.models.Success
 
 import com.hackfest.swiftaid.viewModels.MapsViewModel
 import com.hackfest.swiftaid.viewModels.UserAmbulanceViewModel
-import com.hackfest.swiftaid.viewModels.factory.MapViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     private lateinit var binding: FragmentTrackingfragmentBinding
-    private lateinit var mapsViewModel: MapsViewModel
+    private  val mapsViewModel by viewModels<MapsViewModel>()
     private lateinit var map: GoogleMap
     private lateinit var myMarker: Marker
-    private lateinit var factory: MapViewModelFactory
-    private lateinit var repository: Repository
-    private lateinit var nearestambulance: Ambulance
-    private lateinit var nearestAmbulanceData: NearestAmbulanceData
-    private lateinit var ambulanceViewModel: UserAmbulanceViewModel
-    private lateinit var auth: FirebaseAuth
+    private  var nearestambulance: Ambulance? = null
+
+    private val ambulanceViewModel by viewModels<UserAmbulanceViewModel>()
+
     private var vn: String =""
-    private lateinit var database: FirebaseDatabase
+
     private var ac: Boolean = false
     private var ventilator: Boolean = false
     private var reqId: String = ""
@@ -70,23 +64,6 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         }
         bottomSheetFragment2 = BottomSheetFragment2()
         binding = FragmentTrackingfragmentBinding.inflate(inflater, container, false)
-        repository = Repository()
-
-        factory = MapViewModelFactory(repository, requireActivity().application)
-
-        database = Firebase.database
-        mapsViewModel = ViewModelProvider(this, factory)[MapsViewModel::class.java]
-
-        auth = Firebase.auth
-
-        ambulanceViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        )[UserAmbulanceViewModel::class.java]
-        // getting the list of ambulances
-
-
-        nearestAmbulanceData = NearestAmbulanceData()
 
 
         // handling location
@@ -94,11 +71,11 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         mapsViewModel.startLocationUpdates()
 
         // getting live location nd setting it to map
-        mapsViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            e("loc", "$it")
-            myMarker.position = it
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
-            nearestAmbulanceData.getambulancelist {
+        mapsViewModel.getLocationLiveData().observe(viewLifecycleOwner) { latLng ->
+            e("loc", "$latLng")
+            myMarker.position = latLng
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM))
+            mapsViewModel.getambulancelist {
                 ambulanceViewModel.getNearestAmbulance(
                     myMarker!!.position.latitude,
                     myMarker!!.position.longitude,
@@ -107,22 +84,26 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
                 )
                 myMarker.position.latitude
                 myMarker.position.longitude
-                ambulanceViewModel.getNearestAmbulanceLiveData().observe(viewLifecycleOwner) {
-                    nearestambulance = it
+                ambulanceViewModel.getNearestAmbulanceLiveData().observe(viewLifecycleOwner) {it->
+                    if(it is Success<Ambulance>) nearestambulance = it.data
+                    else {
+                        nearestambulance = null
+                        e("no ambulance found" , " not found" )
+                    }
 
                     Log.e("nearestaaa", nearestambulance.toString())
                 }
 
                 val myref =
                     FirebaseDatabase.getInstance().getReference("ambulance")
-                nearestambulance.vehicleNumber?.let {
+                nearestambulance?.vehicleNumber?.let {it->
                     val myref =
                         FirebaseDatabase.getInstance().getReference("ambulance")
                     myref.child(it).child("AssignedTo").setValue(reqId)
                     myref.child(it).child("busy").setValue(true)
 
                 }
-                nearestambulance.vehicleNumber?.let {
+                nearestambulance?.vehicleNumber?.let {
                    vn = it
                 }
 
@@ -130,7 +111,8 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
 
 //                map.clear()
-                nearestAmbulanceData.marknearestambulance(nearestambulance, map)
+                nearestambulance?.let { it -> mapsViewModel.markNearestAmbulance(map,it) }
+
                 //     createMarker(myMarker!!.position.latitude,myMarker!!.position.longitude)
 
             }
@@ -203,11 +185,13 @@ class trackingfragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
-        var list = ambulanceViewModel.getNearestAmbulanceLiveData().value
+        val list = ambulanceViewModel.getNearestAmbulanceLiveData().value
+        if(list is Failure<Ambulance>) return  false
         val bundle = Bundle()
-        bundle.putString("drivername", list!!.driverName)
-        bundle.putString("drivernumber", list!!.driverNumber)
-        bundle.putString("vehiclenumber", list!!.vehicleNumber)
+        val ambu = (list as Success<Ambulance>).data
+        bundle.putString("drivername", ambu.driverName)
+        bundle.putString("drivernumber", ambu.driverNumber)
+        bundle.putString("vehiclenumber", ambu.vehicleNumber)
         bottomSheetFragment2.arguments = bundle
         bottomSheetFragment2.show(childFragmentManager, bottomSheetFragment2.tag)
         return true

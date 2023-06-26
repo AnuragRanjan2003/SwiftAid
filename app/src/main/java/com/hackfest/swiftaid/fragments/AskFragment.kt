@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentAskBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class AskFragment : Fragment() {
     private lateinit var binding: FragmentAskBinding
     override fun onCreate(savedInstanceState: Bundle?) {

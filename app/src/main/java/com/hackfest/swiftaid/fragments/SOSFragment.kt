@@ -14,8 +14,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hackfest.swiftaid.R
 import com.hackfest.swiftaid.databinding.FragmentSOSBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SOSFragment : Fragment() {
     private lateinit var binding: FragmentSOSBinding
     private lateinit var auth: FirebaseAuth
